@@ -1,9 +1,8 @@
 {
     'name': "Website Help Desk / Support Ticket - Analytic Timesheets",
-    'version': "1.0.8",
+    'version': "1.0.9",
     'author': "Sythil Tech",
     'category': "Tools",
-    'support': "steven@sythiltech.com.au",
     'summary':'Track time spend on tickets',
     'license':'LGPL-3',
     'data': [

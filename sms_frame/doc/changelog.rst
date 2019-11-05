@@ -1,3 +1,15 @@
+v1.0.33
+=======
+* Fix sms messages in models without name field issue
+
+v1.0.32
+=======
+* Fix sms (no attachment) recieve issue
+
+v1.0.31
+=======
+* Revamp receive sms to support mms attachments
+
 v1.0.30
 =======
 * Include from address in mail subject

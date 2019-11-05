@@ -33,14 +33,17 @@ class SmsMessage(models.Model):
             my_record_count = self.env[self.model_id.model].search_count([('id','=',self.record_id)])
             if my_record_count > 0:
                 my_record = self.env[self.model_id.model].search([('id','=',self.record_id)])
-                self.record_name = my_record.name
+                if self.env['ir.model.fields'].search([('model_id.model','=',self.model_id.model), ('name','=','name')]):
+                    self.record_name = my_record.name
+                else:
+                    self.record_name = False                
             else:
                 self.record_name = self.to_mobile
                 
     def find_owner_model(self, sms_message):
         """Gets the model and record this sms is meant for"""
         #look for a partner with this number
-        partner_id = self.env['res.partner'].search([('mobile','=', sms_message.find('From').text)])
+        partner_id = self.env['res.partner'].search([('mobile','=', sms_message.find('From').text )])
     	if len(partner_id) > 0:
     	    return {'record_id': partner_id[0], 'target_model': "res.partner"}
     	else:

@@ -1,9 +1,8 @@
 {
     'name': "Website Help Desk / Support Ticket - Timesheets",
-    'version': "1.1.2",
+    'version': "1.1.3",
     'author': "Sythil Tech",
     'category': "Tools",
-    'support': "steven@sythiltech.com.au",
     'summary':'Track time spend on tickets and send an invoice',
     'license':'LGPL-3',
     'data': [
