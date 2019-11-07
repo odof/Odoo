@@ -32,6 +32,7 @@
         'data/website.support.settings.xml',
         'data/website.support.department.role.csv',
         'data/website.support.ticket.approval.xml',
+        'wizards/of_message_move_views.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [],

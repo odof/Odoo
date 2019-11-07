@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="of_website_support_message_move_view_form" model="ir.ui.view">
+        <field name="name">of.website.support.message.move.form.view</field>
+        <field name="model">of.website.support.message.move</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="ticket_id"/>
+                    <field name="new_ticket_id"/>
+                    <field name="partner_id"/>
+                    <field name="message_ids"
+                           context="{'tree_view_ref': 'website_support.of_mail_message_tree_view'}"/>
+                    <field name="subject"
+                           attrs="{'invisible': [('new_ticket_id','!=',False)]}"/>
+                    <field name="description" widget="html"
+                           attrs="{'invisible': [('new_ticket_id','!=',False)]}"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" string="Valider" type="object" class="btn-primary"/>
+                    <button string="Annuler" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="of_mail_message_tree_view" model="ir.ui.view">
+        <field name="name">of_mail_message_tree_view</field>
+        <field name="model">mail.message</field>
+        <field name="priority">100</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="author_id"/>
+                <field name="subject"/>
+                <field name="of_body_condensed"/>
+            </tree>
+        </field>
+    </record>
+
+    <act_window
+        id="action_of_website_support_message_move"
+        name="Déplacer des messages"
+        res_model="of.website.support.message.move"
+        src_model="website.support.ticket"
+        target="new"
+        view_type="form"
+        view_mode="form"
+    />
+
+</odoo>
