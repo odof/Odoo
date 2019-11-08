@@ -239,11 +239,11 @@ class WebsiteSupportTicket(models.Model):
                     
         #(BACK COMPATABILITY) Fail safe if no template is selected, future versions will allow disabling email by removing template
         ticket_open_email_template = self.env['ir.model.data'].get_object('website_support', 'website_ticket_state_open').mail_template_id
-        if ticket_open_email_template == False:
-            ticket_open_email_template = self.env['ir.model.data'].sudo().get_object('website_support', 'support_ticket_new')
+        if ticket_open_email_template:
             ticket_open_email_template.send_mail(new_id.id, True)
-        else:
-            ticket_open_email_template.send_mail(new_id.id, True)
+        # else:
+        #     ticket_open_email_template = self.env['ir.model.data'].sudo().get_object('website_support', 'support_ticket_new')
+        #     ticket_open_email_template.send_mail(new_id.id, True)
 
         #Send an email out to everyone in the category
         notification_template = self.env['ir.model.data'].sudo().get_object('website_support', 'new_support_ticket_category')
