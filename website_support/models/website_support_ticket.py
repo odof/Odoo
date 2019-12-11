@@ -121,7 +121,7 @@ class WebsiteSupportTicket(models.Model):
         defaults['email'] = from_email
         
         #Try to find the partner using the from email
-        search_partner = self.env['res.partner'].sudo().search([('email','=', from_email)])
+        search_partner = self.env['res.partner'].sudo().search([('email', 'ilike', from_email)])
         if len(search_partner) > 0:
             defaults['partner_id'] = search_partner[0].id
             defaults['person_name'] = search_partner[0].name
@@ -274,9 +274,10 @@ class WebsiteSupportTicket(models.Model):
                 self.state.mail_template_id.send_mail(self.id, True)
                 
         #Email user if category has changed
-        if 'category' in values:
-            change_category_email = self.env['ir.model.data'].sudo().get_object('website_support', 'new_support_ticket_category_change')
-            change_category_email.send_mail(self.id, True)
+        # OF Pas d'envoi d'email au changement de catégorie
+        # if 'category' in values:
+        #     change_category_email = self.env['ir.model.data'].sudo().get_object('website_support', 'new_support_ticket_category_change')
+        #     change_category_email.send_mail(self.id, True)
 
         if 'user_id' in values:
             setting_change_user_email_template_id = self.env['ir.values'].get_default('website.support.settings', 'change_user_email_template_id')
@@ -297,7 +298,7 @@ class WebsiteSupportTicket(models.Model):
             send_mail = self.env['mail.mail'].create(email_values)
             send_mail.send()
 
-        
+
         return update_rec
 
     def send_survey(self):
