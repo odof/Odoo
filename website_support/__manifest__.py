@@ -33,6 +33,7 @@
         'data/website.support.department.role.csv',
         'data/website.support.ticket.approval.xml',
         'wizards/of_message_move_views.xml',
+        'wizards/of_ticket_merge_views.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [],
