@@ -122,6 +122,8 @@
               <search>
                   <field name="partner_id"/>
                   <filter string="Unattended Tickets" name="unattended_tickets" domain="[('unattended', '=', True )]" />
+                  <separator/>
+                  <filter string="My tickets" name="my_tickets" domain="[('user_id', '=', uid)]"/>
                   <filter name="group_by_category" string="Category" domain="[]"  context="{'group_by':'category'}"/>
                   <filter name="group_by_user" string="User" domain="[]"  context="{'group_by':'user_id'}"/>
               </search>
