@@ -29,7 +29,11 @@ class OFWebsiteSupportTicketMerge(models.TransientModel):
 
         new_ticket = tickets[0]
         old_tickets = tickets[1:]
+        # Déplacement du fil de discussion
         old_tickets.mapped('message_ids').write({'res_id': new_ticket.id})
+        # Déplacement des pièces jointes
+        old_tickets.mapped('attachment_ids').write({'res_id': new_ticket.id})
+
         old_tickets.sudo().unlink()
 
         action = self.env.ref('website_support.website_support_ticket_action').read()[0]

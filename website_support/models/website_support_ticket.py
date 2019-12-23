@@ -60,7 +60,7 @@ class WebsiteSupportTicket(models.Model):
     create_user_id = fields.Many2one('res.users', "Create User")
     priority_id = fields.Many2one('website.support.ticket.priority', default=_default_priority_id, string="Priority")
     partner_id = fields.Many2one('res.partner', string="Partner")
-    user_id = fields.Many2one('res.users', string="Assigned User")
+    user_id = fields.Many2one('res.users', string="Assigned User", domain="[('share', '=', False)]")
     person_name = fields.Char(string="Person Name")
     email = fields.Char(string="Email")
     support_email = fields.Char(string="Support Email")
@@ -249,7 +249,32 @@ class WebsiteSupportTicket(models.Model):
         notification_template = self.env['ir.model.data'].sudo().get_object('website_support', 'new_support_ticket_category')
         support_ticket_menu = self.env['ir.model.data'].sudo().get_object('website_support', 'website_support_ticket_menu')
         support_ticket_action = self.env['ir.model.data'].sudo().get_object('website_support', 'website_support_ticket_action')
-        
+
+        # OF Si user_id assigné, envoi d'un email de ticket affecté aà l'utilisateur concerné,
+        # pas d'envoi d'email aux utilisateurs de la catégorie d'email
+        if vals.get('user_id'):
+            # Code copié depuis la fonction write
+            setting_change_user_email_template_id = self.env['ir.values'].get_default('website.support.settings',
+                                                                                      'change_user_email_template_id')
+
+            if setting_change_user_email_template_id:
+                email_template = self.env['mail.template'].browse(setting_change_user_email_template_id)
+            else:
+                # Default email template
+                email_template = self.env['ir.model.data'].get_object('website_support', 'support_ticket_user_change')
+
+            email_values = email_template.generate_email([new_id.id])[new_id.id]
+            email_values['model'] = "website.support.ticket"
+            email_values['res_id'] = new_id.id
+            assigned_user = self.env['res.users'].browse(int(vals['user_id']))
+            email_values['email_to'] = assigned_user.partner_id.email
+            email_values['body_html'] = email_values['body_html'].replace("_user_name_", assigned_user.name)
+            email_values['body'] = email_values['body'].replace("_user_name_", assigned_user.name)
+            send_mail = self.env['mail.mail'].create(email_values)
+            send_mail.send()
+            # pas d'envoi d'email aux utilisateurs de la catégorie d'email
+            return new_id
+
         for my_user in new_id.category.cat_user_ids:
             values = notification_template.generate_email(new_id.id)
             values['body_html'] = values['body_html'].replace("_ticket_url_", "web#id=" + str(new_id.id) + "&view_type=form&model=website.support.ticket&menu_id=" + str(support_ticket_menu.id) + "&action=" + str(support_ticket_action.id) ).replace("_user_name_",  my_user.partner_id.name)
