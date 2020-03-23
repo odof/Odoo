@@ -124,6 +124,7 @@
                   <filter string="Unattended Tickets" name="unattended_tickets" domain="[('unattended', '=', True )]" />
                   <separator/>
                   <filter string="My tickets" name="my_tickets" domain="[('user_id', '=', uid)]"/>
+                  <filter string="Unassigned tickets" name="unassigned_tickets" domain="[('user_id', '=', False)]"/>
                   <filter name="group_by_category" string="Category" domain="[]"  context="{'group_by':'category'}"/>
                   <filter name="group_by_user" string="User" domain="[]"  context="{'group_by':'user_id'}"/>
               </search>
