@@ -304,7 +304,9 @@ class WebsiteSupportTicket(models.Model):
         #     change_category_email = self.env['ir.model.data'].sudo().get_object('website_support', 'new_support_ticket_category_change')
         #     change_category_email.send_mail(self.id, True)
 
-        if 'user_id' in values:
+        # OF Pas d'envoi d'email à un utilisateur vide
+        # if 'user_id' in values:
+        if values.get('user_id'):
             setting_change_user_email_template_id = self.env['ir.values'].get_default('website.support.settings', 'change_user_email_template_id')
         
             if setting_change_user_email_template_id:
@@ -322,7 +324,6 @@ class WebsiteSupportTicket(models.Model):
             email_values['body'] = email_values['body'].replace("_user_name_", assigned_user.name)
             send_mail = self.env['mail.mail'].create(email_values)
             send_mail.send()
-
 
         return update_rec
 
